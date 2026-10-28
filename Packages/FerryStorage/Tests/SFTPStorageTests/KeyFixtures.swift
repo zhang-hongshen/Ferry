@@ -1,0 +1,135 @@
+// Test-only keys generated with ssh-keygen for these tests. They are not used anywhere else.
+
+enum KeyFixtures {
+    static let ed25519plain = Fixture(
+        privateKey: """
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACAB4OiVPLpo4qlhQ15qMG+6iJtl4xg4yvAfpnflL223jAAAAIh6cYuPenGL
+jwAAAAtzc2gtZWQyNTUxOQAAACAB4OiVPLpo4qlhQ15qMG+6iJtl4xg4yvAfpnflL223jA
+AAAEC0XaofKgMkYg8RIJ6X+muc7t3iWJogsgP1uCmMqteu0QHg6JU8umjiqWFDXmowb7qI
+m2XjGDjK8B+md+UvbbeMAAAABHRlc3QB
+-----END OPENSSH PRIVATE KEY-----
+""",
+        publicKey: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAHg6JU8umjiqWFDXmowb7qIm2XjGDjK8B+md+UvbbeM",
+        passphrase: nil
+    )
+    static let ed25519enc = Fixture(
+        privateKey: """
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABCcJ6k9Nd
+WAep18BcVYg9h5AAAAGAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAIF7wnB4LbAo2MA/E
+qerhOm5trDY1ZkC0v4nFDx6S+Im2AAAAkH+kqhpt8Ram7hn0YgirVSTtYdJ/1OUUmuQBnP
+WcZK4Wj5ZYeD9q3nAL2KI1XLRpPjkhl2eM6gyOnDBt9XG7JQy1oKhjP0qkFEGDgmLiGVEF
+Y0ogn0Wv4kmXPsU+gqAkfsuQelGcj889tCF20mRbtQqOhFC0mlvZMaV3CmeWU+McxbdmKt
+9zDw6HtlophRq1ew==
+-----END OPENSSH PRIVATE KEY-----
+""",
+        publicKey: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF7wnB4LbAo2MA/EqerhOm5trDY1ZkC0v4nFDx6S+Im2",
+        passphrase: "correct horse"
+    )
+    static let p256enc = Fixture(
+        privateKey: """
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABC+rLCPqu
++PLSL5qyfdPIiiAAAAGAAAAAEAAABoAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlz
+dHAyNTYAAABBBMTDl9JFLjVfsDl9Y+9YAaw5IeITtJm6p/EQCHhde8LFzC5DhMNmBiMORu
+eRYeJ9Fi93U9QsXyfS0dYWrvF62W8AAACgY13vxuik4K1MmP7i4WUfnEqZT4J7ybq+MxHb
+QyBKJYYdDcukJ78+NHdnQdhmnhzRkJPiTaf9sV5tvx52ndOznoWeTW15ZbDR3NEGC+9o8g
+kRAZO3yt9NgFpzQk4cZwaa0RfsXyjGF5JKqHXtnuGaNuH+d+vQky8QE1IH8+5pV6dbQ9HC
+0vsOh+Kp6QpB4KVAkJrL3w2jm+uukIommUCfxw==
+-----END OPENSSH PRIVATE KEY-----
+""",
+        publicKey: "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMTDl9JFLjVfsDl9Y+9YAaw5IeITtJm6p/EQCHhde8LFzC5DhMNmBiMORueRYeJ9Fi93U9QsXyfS0dYWrvF62W8=",
+        passphrase: "p256 pass"
+    )
+    static let p384plain = Fixture(
+        privateKey: """
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAiAAAABNlY2RzYS
+1zaGEyLW5pc3RwMzg0AAAACG5pc3RwMzg0AAAAYQT5QNvCkLMQ4VCpeAZMQQimlPbZ1QJM
+J8DslSO3VdprV+09hr2djGjKnejLgkKWC/uo853AlI4ykDUGGJKy6LaWnMgWx27CTy76bN
+EpBtV+nByGh6Uu/dHty7+ubd0n/YMAAADQDd/9CA3f/QgAAAATZWNkc2Etc2hhMi1uaXN0
+cDM4NAAAAAhuaXN0cDM4NAAAAGEE+UDbwpCzEOFQqXgGTEEIppT22dUCTCfA7JUjt1Xaa1
+ftPYa9nYxoyp3oy4JClgv7qPOdwJSOMpA1BhiSsui2lpzIFsduwk8u+mzRKQbVfpwchoel
+Lv3R7cu/rm3dJ/2DAAAAMBxOgwRuaafR4zOdN8u0+zvKQSPXN3/KClx1WjC1L73O2rlFtv
+p5C84/VVQr9OU7VQAAAAR0ZXN0AQIDBA==
+-----END OPENSSH PRIVATE KEY-----
+""",
+        publicKey: "ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBPlA28KQsxDhUKl4BkxBCKaU9tnVAkwnwOyVI7dV2mtX7T2GvZ2MaMqd6MuCQpYL+6jzncCUjjKQNQYYkrLotpacyBbHbsJPLvps0SkG1X6cHIaHpS790e3Lv65t3Sf9gw==",
+        passphrase: nil
+    )
+    static let p521enc = Fixture(
+        privateKey: """
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABDiIfiVXA
+LBLs8HBFPtg+q3AAAAGAAAAAEAAACsAAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlz
+dHA1MjEAAACFBACAnurSTWztIOIAlhGBBwoEp3Qn6kPI7QkLknEed2Y+Mut3GI43YNCXpY
+cahCYPbcjjTd0tKkkZ5gdFivHmkCurwQAj/H3jZlH+r+w7AvIavvssZptLUB4hrlP6FkYb
+rnHAPKbr1wUc5tqCOd0YZuePk33iKQ99k0WvdKU9RtA0z0z0QgAAARAvMtw+Kw24wyDsem
+D1eBkp3RDQgkBwp85ZXHDRrMb2VObRQdxqfaiZL8RPtYvjiSPFnvk3vkTYz6pPLcZTn/3K
+lorNYoBcT/oFIeA56rlPn3cJ+GYWDcdRvEzQw44p/4C5fnhp6zGxe71wxQy5/ifesfOmNm
+tNN0CUPqwmcJzQjTVkLdnPz4Vzr9XQEMZxr3XfWurOiaRBpbPZI6cEUO4+QGBc87IUvUlt
+z1cBA7MscJzbJ6MCzDhHMFe3TXTcAuSwpg6kMgWYpJ5TgYQ8fZNyK+MbLcfSNfLyHGo1i4
+qS+yD7bI0FeFltTgKB9I2kaGT/Agd8AYpYfuHkznIwtUzAc+sgaH4oef3l6iJ1mhD9jA==
+-----END OPENSSH PRIVATE KEY-----
+""",
+        publicKey: "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBACAnurSTWztIOIAlhGBBwoEp3Qn6kPI7QkLknEed2Y+Mut3GI43YNCXpYcahCYPbcjjTd0tKkkZ5gdFivHmkCurwQAj/H3jZlH+r+w7AvIavvssZptLUB4hrlP6FkYbrnHAPKbr1wUc5tqCOd0YZuePk33iKQ99k0WvdKU9RtA0z0z0Qg==",
+        passphrase: "p521"
+    )
+    static let p256pem = Fixture(
+        privateKey: """
+-----BEGIN EC PRIVATE KEY-----
+MIIBaAIBAQQg9f/pIlYzQ5mT9/tFhMXII6ffUe7v9B2sBQGTaNQo5syggfowgfcC
+AQEwLAYHKoZIzj0BAQIhAP////8AAAABAAAAAAAAAAAAAAAA////////////////
+MFsEIP////8AAAABAAAAAAAAAAAAAAAA///////////////8BCBaxjXYqjqT57Pr
+vVV2mIa8ZR0GsMxTsPY7zjw+J9JgSwMVAMSdNgiG5wSTamZ44ROdJreBn36QBEEE
+axfR8uEsQkf4vOblY6RA8ncDfYEt6zOg9KE5RdiYwpZP40Li/hp/m47n60p8D54W
+K84zV2sxXs7LtkBoN79R9QIhAP////8AAAAA//////////+85vqtpxeehPO5ysL8
+YyVRAgEBoUQDQgAEYap9jFk6eDD8Q3VdMzv0WLAfRLf0CWhZtQP1zg698JW9tgK7
+CFvvzkbc2N99lTrwWQSWlzRkaYdlei1nycxvmQ==
+-----END EC PRIVATE KEY-----
+""",
+        publicKey: "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBGGqfYxZOngw/EN1XTM79FiwH0S39AloWbUD9c4OvfCVvbYCuwhb785G3NjffZU68FkElpc0ZGmHZXotZ8nMb5k=",
+        passphrase: nil
+    )
+    static let rsaplain = Fixture(
+        privateKey: """
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn
+NhAAAAAwEAAQAAAQEAw6Q0VtMC+tbAQhnlkgyIpDglUhO6bzy0BnEhpxzd41f+cEUpPsHU
+3eXtCOaXlH9oAJSNPqf/YZr6mIKtxCb+U90DzYa+Jo12JASy40LRDGVrO1ZvE5BxxYm4m2
+8SRwVzJHlZVzGbWVyFDc5/V4grON0eP9SmAa65oYASqV5qGMXDPtzfDelNk7fFinli22xS
+o3nmWZaZyauIk2oAAXWR0pbIh9YAYQuqtDVpqyr88EhD9Yd6eFvbeXZabH6oTuWAm/qb0n
+M/8rrzAEapdtSLjxPJvsv0W1AkSFk8yRl7ZanX+besB+HkfhafVVmK+2ikRciT5NKqwoNr
+xrUYuyFOTwAAA8CANvMEgDbzBAAAAAdzc2gtcnNhAAABAQDDpDRW0wL61sBCGeWSDIikOC
+VSE7pvPLQGcSGnHN3jV/5wRSk+wdTd5e0I5peUf2gAlI0+p/9hmvqYgq3EJv5T3QPNhr4m
+jXYkBLLjQtEMZWs7Vm8TkHHFibibbxJHBXMkeVlXMZtZXIUNzn9XiCs43R4/1KYBrrmhgB
+KpXmoYxcM+3N8N6U2Tt8WKeWLbbFKjeeZZlpnJq4iTagABdZHSlsiH1gBhC6q0NWmrKvzw
+SEP1h3p4W9t5dlpsfqhO5YCb+pvScz/yuvMARql21IuPE8m+y/RbUCRIWTzJGXtlqdf5t6
+wH4eR+Fp9VWYr7aKRFyJPk0qrCg2vGtRi7IU5PAAAAAwEAAQAAAQB8MMZQv05K8PvGei3y
+0iYDKOj3+zID3uLgm/wi2v43jOolVqHiBqUb3xLi7Y4XY/EfPS2UMoy45upg2cN4mtAjaE
+87rmcSjgYKwzjTbtzJI7A4UJveLXkrTktzz8QodVssMiP2Z7UXutVzeDv50qStSiAjoNdo
+hgOsc2JlRVvQMMzKGWRUnudJ9BXDgHXIeeuPFjSEOh00xd6uzzU8Wpb16e8WJi5vcm28vG
+Ku5EkD6maZuw1v75MMh1zmUgbBMWDQpWFs78RdK0OB7fpfB3oibNapBnvR/QAaQaxYYOSd
+G/BKHBGZguuMYdGimdh9YPhij5gzHORsu9jPH8Tb4ISBAAAAgETxhY6Ocu7tdJWKcnOVBK
+cBMbaktzAomhW/TNhFbeJSxp+Zlk7nfUQk+/jr9SpL9AWiyBMjdAFwGE1CybyTLUvNZFIK
+wFHmpZe0NI8PrSLCD1+OPdU9fGKUUILwZupqixPKMaJBmPoOysNITUfADpo3nFGaToI5hb
+m0rqd85jLCAAAAgQDyBoR9TPVlLxBqTSwUAkO0HN5552IEEZwVDp8vJiiOKxMKLAkCgdLZ
+5B0t967Kc5+oRNrHGIUJthXROdlexzjS+qLfeVrH8yOufAMY89XshZkpotearr2U1vfqTP
+h/Eiv7QVbHybh1NL1Gp6dz9WQNmkEHjUh/oVwFrZ7Iucbj4QAAAIEAzvAQhJ6iCqBSiaCh
+l2e518KLTcMI2VEBojt3m3V17WNBAiIfMxPtjOtz3PcrEcLZgEgKsfP2D6FeuvUXlsYudO
+HOXQo2R+WAi2kXz5d5fPi5GhXxC/n6pzmLUphnJ5Xo4En7STNXORDTjkkgDzm/fFLLoFx6
+/yVvYsgKlX5MeC8AAAAEdGVzdAECAwQFBgc=
+-----END OPENSSH PRIVATE KEY-----
+""",
+        publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDpDRW0wL61sBCGeWSDIikOCVSE7pvPLQGcSGnHN3jV/5wRSk+wdTd5e0I5peUf2gAlI0+p/9hmvqYgq3EJv5T3QPNhr4mjXYkBLLjQtEMZWs7Vm8TkHHFibibbxJHBXMkeVlXMZtZXIUNzn9XiCs43R4/1KYBrrmhgBKpXmoYxcM+3N8N6U2Tt8WKeWLbbFKjeeZZlpnJq4iTagABdZHSlsiH1gBhC6q0NWmrKvzwSEP1h3p4W9t5dlpsfqhO5YCb+pvScz/yuvMARql21IuPE8m+y/RbUCRIWTzJGXtlqdf5t6wH4eR+Fp9VWYr7aKRFyJPk0qrCg2vGtRi7IU5P",
+        passphrase: nil
+    )
+}
+
+struct Fixture {
+    let privateKey: String
+    let publicKey: String
+    let passphrase: String?
+}
