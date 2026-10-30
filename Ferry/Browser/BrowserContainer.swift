@@ -112,7 +112,11 @@ struct PathBar: View {
                         } else if path == top {
                             Label(path.name, systemImage: "archivebox")
                         } else {
-                            Text(path.name)
+                            Label {
+                                Text(path.name)
+                            } icon: {
+                                FileIcon(item: RemoteItem(path: path, kind: .directory))
+                            }
                         }
                     }
                     .buttonStyle(.borderless)

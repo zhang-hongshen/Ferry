@@ -169,9 +169,9 @@ struct BrowserView: View {
         }
         ToolbarGroupSpacer()
         ToolbarItemGroup {
-            Button { handle(.upload) } label: { Label("Upload", systemImage: "arrow.up.doc") }
+            Button { handle(.upload) } label: { Label("Upload", systemImage: "arrow.up") }
                 .disabled(!tab.canWriteHere)
-            Button { handle(.download) } label: { Label("Download", systemImage: "arrow.down.doc") }
+            Button { handle(.download) } label: { Label("Download", systemImage: "arrow.down") }
                 .disabled(tab.selection.isEmpty)
             Button { tab.refresh() } label: { Label("Refresh", systemImage: "arrow.clockwise") }
         }

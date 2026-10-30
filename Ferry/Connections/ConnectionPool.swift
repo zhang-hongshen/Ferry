@@ -72,10 +72,20 @@ final class ConnectionPool {
 
     /// Replaces the provider with a freshly connected one after the connection dropped.
     func reconnect(_ profile: ConnectionProfile) async throws -> any StorageProvider {
+        let showsBuckets = buckets[profile.id] != nil || bucketErrors[profile.id] != nil
         invalidate(profile.id)
         let provider = try provider(for: profile)
         try await provider.connect()
+        if showsBuckets {
+            Task { await loadBuckets(for: profile) }
+        }
         return provider
+    }
+
+    /// Reloads the bucket list when it last failed, once the connection works again.
+    func reloadBucketsIfFailed(for profile: ConnectionProfile) async {
+        guard bucketErrors[profile.id] != nil else { return }
+        await loadBuckets(for: profile)
     }
 
     func loadBuckets(for profile: ConnectionProfile) async {

@@ -73,9 +73,9 @@ struct FileTableView: View {
                 Text(item.isContainer ? "--" : item.size.map { $0.formatted(.byteCount(style: .file)) } ?? "")
                     .foregroundStyle(.secondary)
                     .monospacedDigit()
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .width(min: 60, ideal: 80)
-            .alignment(.trailing)
             .customizationID("size")
 
             TableColumn("Kind", value: \.typeDescription) { item in

@@ -75,6 +75,8 @@ final class BrowserTab: Identifiable {
     @ObservationIgnored private let pool: ConnectionPool
     @ObservationIgnored let transfers: TransferQueue
     @ObservationIgnored private var uploadObserver: (any NSObjectProtocol)?
+    /// Uploads that finished recently, kept until a listing started after them includes them.
+    @ObservationIgnored private var finishedUploads: [RemotePath: (item: RemoteItem, date: Date)] = [:]
 
     init(pool: ConnectionPool, transfers: TransferQueue) {
         self.pool = pool
@@ -174,14 +176,15 @@ final class BrowserTab: Identifiable {
         guard let provider else { return }
         childTasks[folder]?.cancel()
         childTasks[folder] = Task {
+            let start = Date.now
             var loaded: [RemoteItem] = []
             do {
                 for try await page in provider.list(folder) {
                     guard !Task.isCancelled else { return }
                     loaded.append(contentsOf: page)
-                    childItems[folder] = arranged(loaded)
+                    childItems[folder] = arranged(addingFinishedUploads(to: loaded, in: folder, listedSince: start))
                 }
-                childItems[folder] = arranged(loaded)
+                childItems[folder] = arranged(addingFinishedUploads(to: loaded, in: folder, listedSince: start))
             } catch {
                 guard !Task.isCancelled, !(error is CancellationError) else { return }
                 expandedFolders.remove(folder)
@@ -214,13 +217,14 @@ final class BrowserTab: Identifiable {
     private func loadColumn(_ folder: RemotePath, provider: any StorageProvider) {
         columnTasks[folder]?.cancel()
         columnTasks[folder] = Task {
+            let start = Date.now
             var loaded: [RemoteItem] = []
             do {
                 for try await page in provider.list(folder) {
                     guard !Task.isCancelled else { return }
                     loaded.append(contentsOf: page)
                 }
-                columnItems[folder] = arranged(loaded)
+                columnItems[folder] = arranged(addingFinishedUploads(to: loaded, in: folder, listedSince: start))
             } catch {
                 guard !Task.isCancelled, !(error is CancellationError) else { return }
                 self.error = PresentableError(error)
@@ -248,6 +252,7 @@ final class BrowserTab: Identifiable {
         do {
             provider = try pool.provider(for: profile)
             self.profile = profile
+            finishedUploads = [:]
             backStack = []
             forwardStack = []
             collapseAll()
@@ -369,15 +374,19 @@ final class BrowserTab: Identifiable {
         isLoading = true
         error = nil
         loadTask = Task {
+            let start = Date.now
             do {
                 var loaded: [RemoteItem] = []
                 for try await page in provider.list(path) {
                     guard !Task.isCancelled, self.path == path else { return }
                     loaded.append(contentsOf: page)
-                    items = loaded
+                    items = addingFinishedUploads(to: loaded, in: path, listedSince: start)
                 }
-                items = loaded
+                items = addingFinishedUploads(to: loaded, in: path, listedSince: start)
                 isLoading = false
+                if let profile {
+                    await pool.reloadBucketsIfFailed(for: profile)
+                }
             } catch is CancellationError {
                 return
             } catch {
@@ -485,14 +494,15 @@ final class BrowserTab: Identifiable {
     private func uploadDidFinish(_ job: TransferJob) {
         guard job.destinationConnection == profile?.id, let destination = job.destinationPath,
               let folder = destination.parent else { return }
+        let uploaded = RemoteItem(path: destination, kind: .file, size: job.record.totalBytes, modificationDate: .now)
+        finishedUploads[destination] = (uploaded, .now)
         func adding(to listed: [RemoteItem]) -> [RemoteItem] {
             var listed = listed
             if let index = listed.firstIndex(where: { $0.path == destination }) {
-                listed[index].size = job.record.totalBytes
-                listed[index].modificationDate = .now
+                listed[index].size = uploaded.size
+                listed[index].modificationDate = uploaded.modificationDate
             } else {
-                listed.append(RemoteItem(path: destination, kind: .file, size: job.record.totalBytes,
-                                         modificationDate: .now))
+                listed.append(uploaded)
             }
             return listed
         }
@@ -505,6 +515,16 @@ final class BrowserTab: Identifiable {
         if let column = columnItems[folder] {
             columnItems[folder] = arranged(adding(to: column))
         }
+    }
+
+    /// A listing started at `start` may predate uploads into `folder` that finished since; those are
+    /// added. Uploads that finished before `start` are in the listing and are forgotten.
+    private func addingFinishedUploads(to loaded: [RemoteItem], in folder: RemotePath,
+                                       listedSince start: Date) -> [RemoteItem] {
+        finishedUploads = finishedUploads.filter { $0.key.parent != folder || $0.value.date >= start }
+        let listed = Set(loaded.map(\.path))
+        let missing = finishedUploads.values.map(\.item).filter { $0.path.parent == folder && !listed.contains($0.path) }
+        return loaded + missing
     }
 
     // MARK: Renaming
@@ -604,7 +624,10 @@ extension RemoteItem {
         case .bucket: String(localized: "Bucket")
         case .directory: String(localized: "Folder")
         case .symbolicLink: String(localized: "Alias")
-        case .file: contentType?.localizedDescription ?? String(localized: "Document")
+        case .file:
+            FileKindDescriptions.description(forExtension: path.name.pathExtension)
+                ?? contentType?.localizedDescription
+                ?? String(localized: "Document")
         }
     }
 
