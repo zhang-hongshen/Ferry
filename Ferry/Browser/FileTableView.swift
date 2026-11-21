@@ -166,17 +166,33 @@ private struct FileRows: TableRowContent {
 
     @TableRowBuilder<RemoteItem>
     var tableRowBody: some TableRowContent<RemoteItem> {
-        ForEach(items.filter(\.isContainer)) { folder in
+        let boundary = firstFileIndex
+        ForEach(items[..<boundary]) { folder in
             DisclosureTableRow(folder, isExpanded: expansion(of: folder)) {
                 FileRows(items: outline.children[folder.path] ?? [], outline: outline, tab: tab,
                          dragProvider: dragProvider)
             }
             .itemProvider { dragProvider(folder) }
         }
-        ForEach(items.filter { !$0.isContainer }) { file in
+        ForEach(items[boundary...]) { file in
             TableRow(file)
                 .itemProvider { dragProvider(file) }
         }
+    }
+
+    // BrowserTab keeps containers first, including pending upload placeholders.
+    private var firstFileIndex: Int {
+        var lower = items.startIndex
+        var upper = items.endIndex
+        while lower < upper {
+            let middle = lower + (upper - lower) / 2
+            if items[middle].isContainer {
+                lower = middle + 1
+            } else {
+                upper = middle
+            }
+        }
+        return lower
     }
 
     private func expansion(of folder: RemoteItem) -> Binding<Bool> {
